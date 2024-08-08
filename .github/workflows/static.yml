@@ -32,7 +32,7 @@ jobs:
           deno-version: vx.x.x
 
       - name: Run Deno script
-        run: deno run --allow-net --allow-write get_gxrb.ts
+        run: deno run --allow-net --allow-read --allow-write get_gxrb.ts
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

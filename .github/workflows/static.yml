@@ -25,6 +25,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      
+      - name: Read date.txt before running Deno
+        id: read_before
+        run: echo "date=$(cat date.txt)" >> $GITHUB_OUTPUT
 
       - name: Install Deno
         uses: denoland/setup-deno@v1
@@ -33,6 +37,19 @@ jobs:
 
       - name: Run Deno script
         run: deno run --allow-net --allow-read --allow-write get_gxrb.ts
+
+      - name: Read date.txt after running Deno
+        id: read_after
+        run: echo "date=$(cat date.txt)" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.read_before.date != steps.read_after.date
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add date.txt
+          git commit -m "Update date.txt"
+          git push
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

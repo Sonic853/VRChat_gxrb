@@ -1,4 +1,4 @@
-// deno run --allow-net --allow-write get_gxrb.ts
+// deno run --allow-net --allow-read --allow-write get_gxrb.ts
 import { url, RBBODY } from "./models/api.ts"
 import { resize } from "https://deno.land/x/deno_image@0.0.4/mod.ts"
 import { exists } from "https://deno.land/std@0.224.0/fs/mod.ts"
@@ -13,12 +13,15 @@ const body: RBBODY = await res.json()
 
 const keys = Object.keys(body.list)
 
-if (!await exists("./paper"))
-{
+if (!await exists("./paper")) {
   Deno.mkdir("./paper")
 }
 
-  await Deno.writeFile(`./paper/size.txt`, new TextEncoder().encode(`${keys.length}`))
+const textEncoder = new TextEncoder()
+
+console.log(`当前报纸日期：${body.riqi}`)
+await Deno.writeFile(`./date.txt`, textEncoder.encode(`${body.riqi}`))
+await Deno.writeFile(`./paper/size.txt`, textEncoder.encode(`${keys.length}`))
 
 await Promise.all(
   keys.map(async (key) => {

@@ -50,7 +50,7 @@ jobs:
         run: deno run --allow-net --allow-read --allow-write get_rmrb.ts
 
       - name: Setup imagemagick
-        uses: mfinelli/setup-imagemagick@v5
+        uses: Sonic853/setup-imagemagick@v5mod1
       - run: |
           chmod +x pdf2jpg.sh
           ./pdf2jpg.sh "pdf/rmrb" "paper/rmrb"

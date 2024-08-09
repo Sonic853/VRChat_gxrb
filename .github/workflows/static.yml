@@ -41,14 +41,6 @@ jobs:
       - name: Read date.txt after running Deno
         id: read_after
         run: echo "date=$(cat date.txt)" >> $GITHUB_OUTPUT
-
-      - name: Commit changes
-        if: steps.read_before.outputs.date != steps.read_after.outputs.date
-        run: |
-          git config --local user.email "bot@github.com" && git config --local user.name "853 Actions"
-          git add date.txt
-          git commit -m "Update date.txt"
-          git push
       
       - name: Read date_rmrb.txt before running Deno
         id: read_before_rmrb
@@ -59,13 +51,23 @@ jobs:
 
       - name: Setup imagemagick
         uses: mfinelli/setup-imagemagick@v5
-      - run: ./pdf2jpg.sh "pdf/rmrb" "paper/rmrb"
+      - run: |
+          chmod +x pdf2jpg.sh
+          ./pdf2jpg.sh "pdf/rmrb" "paper/rmrb"
 
       - name: Read date_rmrb.txt after running Deno
         id: read_after_rmrb
         run: echo "date=$(cat date_rmrb.txt)" >> $GITHUB_OUTPUT
 
       - name: Commit changes
+        if: steps.read_before.outputs.date != steps.read_after.outputs.date
+        run: |
+          git config --local user.email "bot@github.com" && git config --local user.name "853 Actions"
+          git add date.txt
+          git commit -m "Update date.txt"
+          git push
+
+      - name: Commit changes rmrb
         if: steps.read_before_rmrb.outputs.date != steps.read_after_rmrb.outputs.date
         run: |
           git config --local user.email "bot@github.com" && git config --local user.name "853 Actions"

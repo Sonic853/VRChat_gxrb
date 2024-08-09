@@ -43,12 +43,36 @@ jobs:
         run: echo "date=$(cat date.txt)" >> $GITHUB_OUTPUT
 
       - name: Commit changes
-        if: steps.read_before.date != steps.read_after.date
+        if: steps.read_before.outputs.date != steps.read_after.outputs.date
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add date.txt
           git commit -m "Update date.txt"
+          git push
+      
+      - name: Read date_rmrb.txt before running Deno
+        id: read_before_rmrb
+        run: echo "date=$(cat date_rmrb.txt)" >> $GITHUB_OUTPUT
+
+      - name: Run Deno script
+        run: deno run --allow-net --allow-read --allow-write get_rmrb.ts
+
+      - name: Setup imagemagick
+        uses: mfinelli/setup-imagemagick@v5
+      - run: ./pdf2jpg.sh "pdf/rmrb" "paper/rmrb"
+
+      - name: Read date_rmrb.txt after running Deno
+        id: read_after_rmrb
+        run: echo "date=$(cat date_rmrb.txt)" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.read_before_rmrb.outputs.date != steps.read_after_rmrb.outputs.date
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add date_rmrb.txt
+          git commit -m "Update date_rmrb.txt"
           git push
 
       - name: Setup Pages

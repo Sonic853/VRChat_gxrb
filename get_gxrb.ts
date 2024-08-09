@@ -1,5 +1,5 @@
 // deno run --allow-net --allow-read --allow-write get_gxrb.ts
-import { url, RBBODY } from "./models/api.ts"
+import { url, RBBODY } from "./models/gxrb/api.ts"
 import { resize } from "https://deno.land/x/deno_image@0.0.4/mod.ts"
 import { exists } from "https://deno.land/std@0.224.0/fs/mod.ts"
 

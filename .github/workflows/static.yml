@@ -45,8 +45,7 @@ jobs:
       - name: Commit changes
         if: steps.read_before.outputs.date != steps.read_after.outputs.date
         run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
+          git config --local user.email "bot@github.com" && git config --local user.name "GitHub Actions"
           git add date.txt
           git commit -m "Update date.txt"
           git push
@@ -69,8 +68,7 @@ jobs:
       - name: Commit changes
         if: steps.read_before_rmrb.outputs.date != steps.read_after_rmrb.outputs.date
         run: |
-          git config --local user.name "GitHub Actions"
-          git config --local user.email "actions@github.com"
+          git config --local user.email "bot@github.com" && git config --local user.name "GitHub Actions"
           git add date_rmrb.txt
           git commit -m "Update date_rmrb.txt"
           git push

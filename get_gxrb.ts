@@ -20,7 +20,7 @@ if (!await exists("./paper")) {
 const textEncoder = new TextEncoder()
 
 console.log(`当前报纸日期：${body.riqi}`)
-await Deno.writeFile(`./date.txt`, textEncoder.encode(`${body.riqi}`))
+await Deno.writeFile(`./date_gxrb.txt`, textEncoder.encode(`${body.riqi}`))
 await Deno.writeFile(`./paper/size.txt`, textEncoder.encode(`${keys.length}`))
 
 await Promise.all(

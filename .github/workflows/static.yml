@@ -26,9 +26,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Read date.txt before running Deno
+      - name: Read date_gxrb.txt before running Deno
         id: read_before
-        run: echo "date=$(cat date.txt)" >> $GITHUB_OUTPUT
+        run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
 
       - name: Install Deno
         uses: denoland/setup-deno@v1
@@ -38,9 +38,9 @@ jobs:
       - name: Run Deno script
         run: deno run --allow-net --allow-read --allow-write get_gxrb.ts
 
-      - name: Read date.txt after running Deno
+      - name: Read date_gxrb.txt after running Deno
         id: read_after
-        run: echo "date=$(cat date.txt)" >> $GITHUB_OUTPUT
+        run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
       
       - name: Read date_rmrb.txt before running Deno
         id: read_before_rmrb
@@ -59,20 +59,27 @@ jobs:
         id: read_after_rmrb
         run: echo "date=$(cat date_rmrb.txt)" >> $GITHUB_OUTPUT
 
-      - name: Commit changes
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Commit changes gxrb
         if: steps.read_before.outputs.date != steps.read_after.outputs.date
         run: |
-          git config --local user.email "bot@github.com" && git config --local user.name "853 Actions"
-          git add date.txt
-          git commit -m "Update date.txt"
+          git config --local user.email "Sonic853@qq.com" && git config --local user.name "853 Action"
+          git add date_gxrb.txt
+          git commit -S -m "Update date_gxrb.txt"
           git push
 
       - name: Commit changes rmrb
         if: steps.read_before_rmrb.outputs.date != steps.read_after_rmrb.outputs.date
         run: |
-          git config --local user.email "bot@github.com" && git config --local user.name "853 Actions"
+          git config --local user.email "Sonic853@qq.com" && git config --local user.name "853 Action"
           git add date_rmrb.txt
-          git commit -m "Update date_rmrb.txt"
+          git commit -S -m "Update date_rmrb.txt"
           git push
 
       - name: Setup Pages

@@ -1,0 +1,1 @@
+export const url = "http://paper.people.com.cn"

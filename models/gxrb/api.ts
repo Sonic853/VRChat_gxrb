@@ -1,4 +1,6 @@
 export const url = "https://ssw.gxrb.com.cn"
+export const paperPath = "./paper"
+export const gxrbPath = `${paperPath}/gxrb`
 export interface RBBODY {
   list: {
     [key: string]: RBLISTITEM

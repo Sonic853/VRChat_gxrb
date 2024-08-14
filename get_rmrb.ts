@@ -1,18 +1,18 @@
 // deno run --allow-net --allow-read --allow-write get_rmrb.ts
-import { url } from "./models/rmrb/api.ts"
+import { paperPath, pdfPath, rmrbPath, rmrbpdfath, url } from "./models/rmrb/api.ts"
 import { exists } from "https://deno.land/std@0.224.0/fs/mod.ts"
 
-if (!await exists("./pdf")) {
-  Deno.mkdir("./pdf")
+if (!await exists(pdfPath)) {
+  Deno.mkdir(pdfPath)
 }
-if (!await exists("./pdf/rmrb")) {
-  Deno.mkdir("./pdf/rmrb")
+if (!await exists(rmrbpdfath)) {
+  Deno.mkdir(rmrbpdfath)
 }
-if (!await exists("./paper")) {
-  Deno.mkdir("./paper")
+if (!await exists(paperPath)) {
+  Deno.mkdir(paperPath)
 }
-if (!await exists("./paper/rmrb")) {
-  Deno.mkdir("./paper/rmrb")
+if (!await exists(rmrbPath)) {
+  Deno.mkdir(rmrbPath)
 }
 
 const now = new Date()
@@ -46,7 +46,7 @@ while (true) {
   console.log(`URL is valid: ${_url}`)
   const response = await fetch(_url)
   const paper = await response.bytes()
-  await Deno.writeFile(`./pdf/rmrb/0${ssize}.pdf`, paper)
+  await Deno.writeFile(`${rmrbpdfath}/0${ssize}.pdf`, paper)
   getFiled = true
   size++
 }
@@ -59,5 +59,5 @@ if (!getFiled)
 
 const textEncoder = new TextEncoder()
 await Deno.writeFile(`./date_rmrb.txt`, textEncoder.encode(`${year}-${month}-${day}`))
-await Deno.writeFile(`./paper/rmrb/size.txt`, textEncoder.encode(`${size}`))
+await Deno.writeFile(`${rmrbPath}/size.txt`, textEncoder.encode(`${size}`))
 console.timeEnd('Execution Time')

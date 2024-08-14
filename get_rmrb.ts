@@ -3,16 +3,16 @@ import { paperPath, pdfPath, rmrbPath, rmrbpdfath, url } from "./models/rmrb/api
 import { exists } from "https://deno.land/std@0.224.0/fs/mod.ts"
 
 if (!await exists(pdfPath)) {
-  Deno.mkdir(pdfPath)
+  await Deno.mkdir(pdfPath)
 }
 if (!await exists(rmrbpdfath)) {
-  Deno.mkdir(rmrbpdfath)
+  await Deno.mkdir(rmrbpdfath)
 }
 if (!await exists(paperPath)) {
-  Deno.mkdir(paperPath)
+  await Deno.mkdir(paperPath)
 }
 if (!await exists(rmrbPath)) {
-  Deno.mkdir(rmrbPath)
+  await Deno.mkdir(rmrbPath)
 }
 
 const now = new Date()

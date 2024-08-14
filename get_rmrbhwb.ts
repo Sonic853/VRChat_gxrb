@@ -3,16 +3,16 @@ import { url } from "./models/rmrbhwb/api.ts"
 import { exists } from "https://deno.land/std@0.224.0/fs/mod.ts"
 
 if (!await exists("./pdf")) {
-  Deno.mkdir("./pdf")
+  await Deno.mkdir("./pdf")
 }
 if (!await exists("./pdf/rmrbhwb")) {
-  Deno.mkdir("./pdf/rmrbhwb")
+  await Deno.mkdir("./pdf/rmrbhwb")
 }
 if (!await exists("./paper")) {
-  Deno.mkdir("./paper")
+  await Deno.mkdir("./paper")
 }
 if (!await exists("./paper/rmrbhwb")) {
-  Deno.mkdir("./paper/rmrbhwb")
+  await Deno.mkdir("./paper/rmrbhwb")
 }
 
 const now = new Date()

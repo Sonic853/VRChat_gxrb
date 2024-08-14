@@ -15,10 +15,10 @@ const body: RBBODY = await res.json()
 const keys = Object.keys(body.list)
 
 if (!await exists(paperPath)) {
-  Deno.mkdir(paperPath)
+  await Deno.mkdir(paperPath)
 }
 if (!await exists(gxrbPath)) {
-  Deno.mkdir(gxrbPath)
+  await Deno.mkdir(gxrbPath)
 }
 
 const textEncoder = new TextEncoder()

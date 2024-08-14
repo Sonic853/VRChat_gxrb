@@ -27,22 +27,29 @@ console.log(`当前报纸日期：${body.riqi}`)
 await Deno.writeFile(`./date_gxrb.txt`, textEncoder.encode(`${body.riqi}`))
 
 let twoPage = 0
-const papers: Uint8Array[] = []
-// await Promise.all(
-//   keys.map(async (key) => {
-//   })
-// )
-for (const key of keys) {
-  const item = body.list[key]
-  let keyint = papers.length + 1
-  try {
-    keyint = parseInt(key)
-  } catch (error) {
-    console.error(error)
-  }
-  const response = await fetch(`${url}${item.zhentu.lujing}`)
-  const paper = await response.bytes()
-  papers.push(paper)
+const loadPapers = new Map<string, Uint8Array>()
+await Promise.all(
+  keys.map(async (key) => {
+    const item = body.list[key]
+    const response = await fetch(`${url}${item.zhentu.lujing}`)
+    const paper = await response.bytes()
+    loadPapers.set(key, paper)
+  })
+)
+const sortedPapers = Array.from(loadPapers.entries())
+  .sort(([keyA], [keyB]) => parseInt(keyA) - parseInt(keyB))
+  .map(([, value]) => value)
+for (let index = 0; index < sortedPapers.length; index++) {
+  const paper = sortedPapers[index]
+  let keyint = index + 1
+  // try {
+  //   keyint = parseInt(key)
+  // } catch (error) {
+  //   console.error(error)
+  // }
+  // const response = await fetch(`${url}${item.zhentu.lujing}`)
+  // const paper = await response.bytes()
+  // papers.set(key, paper)
   const sharpPaper = sharp(paper)
   const metadata = await sharpPaper.metadata()
   const width = metadata.width

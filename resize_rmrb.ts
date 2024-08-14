@@ -3,14 +3,17 @@ import sharp from "npm:sharp@next"
 import { rmrbPath } from "./models/rmrb/api.ts"
 
 let twoPage = 0
-const papers: Uint8Array[] = []
+const papers = new Map<string, Uint8Array>()
 for await (const item of Deno.readDir(rmrbPath)) {
   if (!item.isFile || !item.name.toLowerCase().endsWith(".jpg")) continue
   const paper = await Deno.readFile(`${rmrbPath}/${item.name}`)
-  papers.push(paper)
+  papers.set(item.name.split(".")[0], paper)
 }
-for (let index = 0; index < papers.length; index++) {
-  const paper = papers[index]
+const sortedPapers = Array.from(papers.entries())
+  .sort(([keyA], [keyB]) => parseInt(keyA) - parseInt(keyB))
+  .map(([, value]) => value)
+for (let index = 0; index < sortedPapers.length; index++) {
+  const paper = sortedPapers[index]
   let keyint = index + 1
   const sharpPaper = sharp(paper)
   const metadata = await sharpPaper.metadata()
@@ -33,4 +36,4 @@ for (let index = 0; index < papers.length; index++) {
   }
 }
 const textEncoder = new TextEncoder()
-await Deno.writeFile(`${rmrbPath}/size.txt`, textEncoder.encode(`${papers.length + twoPage}`))
+await Deno.writeFile(`${rmrbPath}/size.txt`, textEncoder.encode(`${sortedPapers.length + twoPage}`))

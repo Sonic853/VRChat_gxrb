@@ -9,7 +9,22 @@ console.time('Execution Time')
 now.setHours(now.getHours() + 8)
 const dateString = now.toISOString().split('T')[0]
 
-const res = await fetch(`${url}/json/interface/epaper/api.php?name=gxrb&date=${dateString}&code=001&v=j4&cb=&_=${Math.round(new Date().getTime() / 1000)}`)
+const res = await fetch(`${url}/json/interface/epaper/api.php?name=gxrb&date=${dateString}&code=001&v=j4&cb=&_=${Math.round(new Date().getTime() / 1000)}`,{
+  "headers": {
+    "accept": "*/*",
+    "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+    "sec-ch-ua": "\"Not)A;Brand\";v=\"99\", \"Microsoft Edge\";v=\"127\", \"Chromium\";v=\"127\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "script",
+    "sec-fetch-mode": "no-cors",
+    "sec-fetch-site": "same-site",
+    "Referer": "https://gxrb.gxrb.com.cn/",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  },
+  "body": null,
+  "method": "GET"
+})
 const body: RBBODY = await res.json()
 
 const keys = Object.keys(body.list)

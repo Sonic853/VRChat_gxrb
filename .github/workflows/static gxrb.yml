@@ -1,0 +1,106 @@
+name: Deploy Static Site gxrb
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Read date_gxrb.txt before running Deno
+        id: read_before
+        run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: vx.x.x
+
+      - name: Run Deno Cache
+        run: deno cache get_gxrb.ts
+
+      - name: Run Deno script gxrb
+        run: deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi get_gxrb.ts
+
+      - name: Read date_gxrb.txt after running Deno
+        id: read_after
+        run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
+      
+      - name: Read date_rmrb.txt before running Deno
+        id: read_before_rmrb
+        run: echo "date=$(cat date_rmrb.txt)" >> $GITHUB_OUTPUT
+
+      - name: Run Deno Cache
+        run: deno cache get_rmrb.ts
+
+      - name: Run Deno script rmrb
+        run: deno run --allow-net --allow-read --allow-write get_rmrb.ts
+
+      - name: Setup imagemagick
+        uses: Sonic853/setup-imagemagick@v5mod1
+      - run: |
+          chmod +x pdf2jpg.sh
+          ./pdf2jpg.sh "pdf/rmrb" "paper/rmrb"
+
+      - name: Run Deno Cache
+        run: deno cache resize_rmrb.ts
+
+      - name: Run Deno script resize rmrb
+        run: deno run --allow-read --allow-write --allow-env --allow-ffi resize_rmrb.ts
+
+      - name: Read date_rmrb.txt after running Deno
+        id: read_after_rmrb
+        run: echo "date=$(cat date_rmrb.txt)" >> $GITHUB_OUTPUT
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Commit changes gxrb
+        if: steps.read_before.outputs.date != steps.read_after.outputs.date
+        run: |
+          git config --local user.email "Sonic853@qq.com" && git config --local user.name "853 Action"
+          git add date_gxrb.txt
+          git commit -S -m "Update date_gxrb.txt"
+          git push
+
+      - name: Commit changes rmrb
+        if: steps.read_before_rmrb.outputs.date != steps.read_after_rmrb.outputs.date
+        run: |
+          git config --local user.email "Sonic853@qq.com" && git config --local user.name "853 Action"
+          git add date_rmrb.txt
+          git commit -S -m "Update date_rmrb.txt"
+          git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: './paper'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

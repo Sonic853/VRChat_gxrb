@@ -26,24 +26,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Read date_gxrb.txt before running Deno
-        id: read_before
-        run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
+      # - name: Read date_gxrb.txt before running Deno
+      #   id: read_before
+      #   run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
 
       - name: Install Deno
         uses: denoland/setup-deno@v1
         with:
           deno-version: vx.x.x
 
-      - name: Run Deno Cache
-        run: deno cache get_gxrb.ts
+      # - name: Run Deno Cache
+      #   run: deno cache get_gxrb.ts
 
-      - name: Run Deno script gxrb
-        run: deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi get_gxrb.ts
+      # - name: Run Deno script gxrb
+      #   run: deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi get_gxrb.ts
 
-      - name: Read date_gxrb.txt after running Deno
-        id: read_after
-        run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
+      # - name: Read date_gxrb.txt after running Deno
+      #   id: read_after
+      #   run: echo "date=$(cat date_gxrb.txt)" >> $GITHUB_OUTPUT
       
       - name: Read date_rmrb.txt before running Deno
         id: read_before_rmrb
@@ -78,13 +78,13 @@ jobs:
           git_user_signingkey: true
           git_commit_gpgsign: true
 
-      - name: Commit changes gxrb
-        if: steps.read_before.outputs.date != steps.read_after.outputs.date
-        run: |
-          git config --local user.email "Sonic853@qq.com" && git config --local user.name "853 Action"
-          git add date_gxrb.txt
-          git commit -S -m "Update date_gxrb.txt"
-          git push
+      # - name: Commit changes gxrb
+      #   if: steps.read_before.outputs.date != steps.read_after.outputs.date
+      #   run: |
+      #     git config --local user.email "Sonic853@qq.com" && git config --local user.name "853 Action"
+      #     git add date_gxrb.txt
+      #     git commit -S -m "Update date_gxrb.txt"
+      #     git push
 
       - name: Commit changes rmrb
         if: steps.read_before_rmrb.outputs.date != steps.read_after_rmrb.outputs.date

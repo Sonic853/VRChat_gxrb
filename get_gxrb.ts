@@ -1,5 +1,5 @@
 // deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi get_gxrb.ts
-import { url, RBBODY, paperPath, gxrbPath } from "./models/gxrb/api.ts"
+import { url, urlhttp, RBBODY, paperPath, gxrbPath } from "./models/gxrb/api.ts"
 // import { resize } from "https://deno.land/x/deno_image@0.0.4/mod.ts"
 import { exists } from "https://deno.land/std@0.224.0/fs/mod.ts"
 import sharp from "npm:sharp@next"
@@ -9,7 +9,7 @@ console.time('Execution Time')
 now.setHours(now.getHours() + 8)
 const dateString = now.toISOString().split('T')[0]
 
-const res = await fetch(`${url}/json/interface/epaper/api.php?name=gxrb&date=${dateString}&code=001&v=j4&cb=&_=${Math.round(new Date().getTime() / 1000)}`,{
+const res = await fetch(`${urlhttp}/json/interface/epaper/api.php?name=gxrb&date=${dateString}&code=001&v=j4&cb=&_=${Math.round(new Date().getTime() / 1000)}`,{
   "headers": {
     "accept": "*/*",
     "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",

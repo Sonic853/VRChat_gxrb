@@ -103,6 +103,8 @@ for (let index = 0; index < sortedPapers.length; index++) {
   }
 }
 
+await Deno.writeFile(`${gxrbPath}/size.txt`, textEncoder.encode(`${sortedPapers.length + twoPage}`))
+
 console.timeEnd('Execution Time')
 
 // const res = await fetch(`${urlhttp}/json/interface/epaper/api.php?name=gxrb&date=${dateString}&code=001&v=j4&cb=&_=${Math.round(new Date().getTime() / 1000)}`,{

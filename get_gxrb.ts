@@ -103,6 +103,7 @@ for (let index = 0; index < sortedPapers.length; index++) {
   }
 }
 
+const textEncoder = new TextEncoder()
 await Deno.writeFile(`${gxrbPath}/size.txt`, textEncoder.encode(`${sortedPapers.length + twoPage}`))
 
 console.timeEnd('Execution Time')

@@ -89,17 +89,17 @@ for (let index = 0; index < sortedPapers.length; index++) {
   keyint += twoPage
   if (width && height && width > height) {
     const paperWith = width / 2
-    const paper1 = await sharpPaper.extract({ left: 0, top: 0, width: paperWith, height }).jpeg({ quality: 100 }).toBuffer()
+    const paper1 = await sharpPaper.extract({ left: 0, top: 0, width: paperWith, height }).resize({ height: 2048 }).jpeg({ quality: 100 }).toBuffer()
     await Deno.writeFile(`${gxrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, paper1)
     twoPage++
     keyint++
     const sharpPaper2 = sharp(paper)
-    const paper2 = await sharpPaper2.extract({ left: paperWith, top: 0, width: paperWith, height }).jpeg({ quality: 100 }).toBuffer()
+    const paper2 = await sharpPaper2.extract({ left: paperWith, top: 0, width: paperWith, height }).resize({ height: 2048 }).jpeg({ quality: 100 }).toBuffer()
     await Deno.writeFile(`${gxrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, paper2)
   }
   else {
-    // const resized = await sharpPaper.resize({ height: 2048 }).jpeg({ quality: 100 }).toBuffer()
-    await Deno.writeFile(`${gxrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, paper)
+    const resized = await sharpPaper.resize({ height: 2048 }).jpeg({ quality: 100 }).toBuffer()
+    await Deno.writeFile(`${gxrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, resized)
   }
 }
 

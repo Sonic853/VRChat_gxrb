@@ -22,12 +22,14 @@ for (let index = 0; index < sortedPapers.length; index++) {
   keyint += twoPage
   if (width && height && width > height) {
     const paperWith = width / 2
-    const paper1 = await sharpPaper.extract({ left: 0, top: 0, width: paperWith, height }).jpeg({ quality: 100 }).toBuffer()
+    const paperWith1 = Math.floor(paperWith)
+    const paperWith2 = Math.ceil(paperWith)
+    const paper1 = await sharpPaper.extract({ left: 0, top: 0, width: paperWith1, height }).jpeg({ quality: 100 }).toBuffer()
     await Deno.writeFile(`${rmrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, paper1)
     twoPage++
     keyint++
     const sharpPaper2 = sharp(paper)
-    const paper2 = await sharpPaper2.extract({ left: paperWith, top: 0, width: paperWith, height }).jpeg({ quality: 100 }).toBuffer()
+    const paper2 = await sharpPaper2.extract({ left: paperWith, top: 0, width: paperWith2, height }).jpeg({ quality: 100 }).toBuffer()
     await Deno.writeFile(`${rmrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, paper2)
   }
   else {

@@ -29,7 +29,7 @@ for (let index = 0; index < sortedPapers.length; index++) {
     twoPage++
     keyint++
     const sharpPaper2 = sharp(paper)
-    const paper2 = await sharpPaper2.extract({ left: paperWith, top: 0, width: paperWith2, height }).jpeg({ quality: 100 }).toBuffer()
+    const paper2 = await sharpPaper2.extract({ left: paperWith1, top: 0, width: paperWith2, height }).jpeg({ quality: 100 }).toBuffer()
     await Deno.writeFile(`${gxrbPath}/${keyint.toString().padStart(3, "0")}.jpg`, paper2)
   }
   else {

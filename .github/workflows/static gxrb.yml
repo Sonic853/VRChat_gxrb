@@ -60,12 +60,19 @@ jobs:
       - run: |
           chmod +x pdf2jpg.sh
           ./pdf2jpg.sh "pdf/rmrb" "paper/rmrb"
+          ./pdf2jpg.sh "pdf/gxrb" "paper/gxrb"
 
       - name: Run Deno Cache
         run: deno cache resize_rmrb.ts
 
       - name: Run Deno script resize rmrb
         run: deno run --allow-read --allow-write --allow-env --allow-ffi resize_rmrb.ts
+
+      - name: Run Deno Cache gxrb
+        run: deno cache resize_gxrb.ts
+
+      - name: Run Deno script resize gxrb
+        run: deno run --allow-read --allow-write --allow-env --allow-ffi resize_gxrb.ts
 
       - name: Read date_rmrb.txt after running Deno
         id: read_after_rmrb

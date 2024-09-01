@@ -47,7 +47,7 @@ let size = 1
 let getFiled = false
 
 while (true) {
-  const ssize = size.toString().padStart(2, "0")
+  const ssize = size.toString().padStart(3, "0")
   const _url = `${url}/newspaper/epaper/gxrb/${year}-${month}-${day}/${ssize}/gxrb${year}${month}${day}${ssize}.pdf`
 
   const header = await fetch(_url, { headers, method: "HEAD" })
@@ -65,7 +65,7 @@ while (true) {
   console.log(`URL is valid: ${_url}`)
   const response = await fetch(_url, fetchConfig)
   const paper = await response.bytes()
-  await Deno.writeFile(`${gxrbpdfath}/0${ssize}.pdf`, paper)
+  await Deno.writeFile(`${gxrbpdfath}/${ssize}.pdf`, paper)
   getFiled = true
   size++
 }
